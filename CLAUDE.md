@@ -23,12 +23,14 @@ npx astro check   # 타입 체크
 
 frontmatter 스키마 (`src/content.config.ts`):
 ```yaml
-title: string        # 필수
-description: string  # 필수 — 없으면 빌드 실패. 검색 결과·OG 카드에 노출됨
-pubDate: date         # 필수
-updatedDate: date     # 선택
-tags: string[]        # 선택, 기본 []
-draft: boolean        # 선택, 기본 false — true면 `npm run build`(PROD) 결과에서 제외
+title: string          # 필수
+description: string    # 필수 — 없으면 빌드 실패. 검색 결과·OG 카드에 노출됨
+pubDatetime: datetime  # 필수 — pubDate 아님에 주의
+modDatetime: datetime  # 선택 (수정일)
+tags: string[]         # 선택, 기본 ["others"]
+draft: boolean         # 선택 — true면 빌드 결과에서 제외
+featured: boolean      # 선택 — 홈 상단 "추천 글"에 노출
+ogImage: string        # 선택 — 없으면 제목으로 자동 생성됨
 ```
 
 ### 작성 워크플로
@@ -141,7 +143,10 @@ draft: boolean        # 선택, 기본 false — true면 `npm run build`(PROD) �
 
 ## 아키텍처 메모
 
-- `astro.config.mjs`의 `site` 값(`https://blog.study-about.club`)이 sitemap·RSS·canonical의 기준이다. 도메인을 바꾸면 여기부터 바꾼다.
-- `src/content.config.ts`는 Astro 7 API를 쓴다 (`src/content/config.ts` 아님, `glob` loader, `render()` — 구버전의 `entry.render()`가 아니다).
-- 스타일은 Tailwind 없이 `src/styles/global.css` 하나로 관리한다. 이 규모에서 유틸리티 프레임워크는 비용 대비 이득이 없다.
+- **테마는 [AstroPaper](https://github.com/satnaing/astro-paper) 6.1.0을 쓴다.** 직접 만든 레이아웃이 아니므로 테마 파일을 함부로 고치지 않는다. 설정으로 해결되는지 먼저 확인한다.
+- **설정은 `astro-paper.config.ts` 한 곳에서 한다.** `src/config.ts`는 기본값을 적용하는 파생 파일이라 건드리지 않는다.
+- 사이트 URL·제목·작성자·소셜 링크가 모두 `astro-paper.config.ts`에 있다. 도메인을 바꾸면 여기부터 바꾼다.
+- **로케일은 `ko`다.** UI 문구는 `src/i18n/lang/ko.ts`에 있다. `astro.config.ts`의 `i18n.locales`에 등록되지 않은 로케일을 `astro-paper.config.ts`에 쓰면 빌드가 깨진다.
+- 스타일은 **Tailwind CSS 4**를 쓴다(테마 기본). 색상 스킴은 `src/styles/`에서 조정한다.
+- RSS·sitemap·OG 이미지 자동 생성·검색(Pagefind)·태그·아카이브·다크모드가 테마에 이미 들어 있다. 직접 만들지 않는다.
 - 서비스(`study-about.club`)와 별도 배포 파이프라인이다. 글 하나 고치자고 About의 CodeBuild를 태우지 않기 위한 의도적 분리다.
