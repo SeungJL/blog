@@ -21,15 +21,22 @@ jobs:
 
       - run: npm run build
 
-      # pages deploy는 프로젝트가 미리 존재해야 한다.
-      # 이미 있으면 에러가 나므로 실패를 무시해 멱등하게 만든다.
+      # 프로젝트가 이미 있으면 실패하는 것이 정상이므로 그 경우만 통과시킨다.
+      # continue-on-error를 쓰면 권한 오류 같은 진짜 실패까지 숨겨진다.
       - name: Ensure Pages project exists
-        continue-on-error: true
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create blog --production-branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -o pipefail
+          if npx wrangler pages project create blog --production-branch=main 2>&1 | tee /tmp/create.log; then
+            echo "프로젝트를 생성했다."
+          elif grep -qiE "already exists|8000007" /tmp/create.log; then
+            echo "프로젝트가 이미 존재한다. 계속 진행한다."
+          else
+            echo "::error::프로젝트 생성 실패 — 위 로그를 확인할 것 (API 토큰에 Cloudflare Pages:Edit 권한이 있는지)"
+            exit 1
+          fi
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
