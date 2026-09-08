@@ -150,3 +150,117 @@
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
+
+/* ── 본문 조판 (About 디자인 언어) ───────────────────────────────
+   한글 본문 기준으로 행간·문단 간격·강조 색을 잡는다.
+   About의 globals.css는 b 태그에 브랜드 민트를 쓴다. 그 규칙을 옮겼다. */
+
+.post-body {
+  font-size: 1.0625rem; /* 17px — 한글 본문 가독 하한 */
+  line-height: 1.85;
+  color: var(--aw-color-text-default);
+}
+
+.post-body :where(p) {
+  margin-top: 0;
+  margin-bottom: 1.4em;
+}
+
+.post-body :where(h2) {
+  font-size: 1.5rem;
+  line-height: 1.45;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+  color: var(--aw-color-text-heading);
+}
+
+.post-body :where(h3) {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--aw-color-text-heading);
+}
+
+/* About은 강조 텍스트에 민트를 쓴다 (globals.css의 b 규칙) */
+.post-body :where(strong),
+.post-body :where(b) {
+  font-weight: 700;
+  color: var(--aw-color-text-heading);
+}
+
+.post-body :where(a) {
+  color: var(--aw-color-primary);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--aw-color-primary) 35%, transparent);
+  transition: border-color 0.15s ease;
+}
+.post-body :where(a):hover {
+  border-bottom-color: var(--aw-color-primary);
+}
+
+.post-body :where(ul),
+.post-body :where(ol) {
+  margin-bottom: 1.4em;
+  padding-left: 1.25rem;
+}
+.post-body :where(li) {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  padding-left: 0.15rem;
+}
+.post-body :where(li)::marker {
+  color: var(--aw-color-text-muted);
+}
+
+.post-body :where(blockquote) {
+  border-left: 3px solid var(--aw-color-primary);
+  background-color: color-mix(in oklab, var(--aw-color-primary) 6%, transparent);
+  margin: 1.75rem 0;
+  padding: 0.85rem 1.15rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: normal;
+  color: var(--aw-color-text-default);
+}
+.post-body :where(blockquote) :where(p):last-child {
+  margin-bottom: 0;
+}
+/* 타이포그래피 플러그인이 넣는 따옴표 제거 */
+.post-body :where(blockquote p)::before,
+.post-body :where(blockquote p)::after {
+  content: none;
+}
+
+.post-body :where(table) {
+  font-size: 0.9375rem;
+  margin: 1.75rem 0;
+}
+.post-body :where(th),
+.post-body :where(td) {
+  padding: 0.6rem 0.85rem;
+}
+.post-body :where(thead th) {
+  border-bottom-width: 2px;
+}
+
+.post-body :where(pre) {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 1.75rem 0;
+}
+
+.post-body :where(hr) {
+  margin: 3rem 0;
+  border-color: color-mix(in oklab, var(--aw-color-text-default) 12%, transparent);
+}
+
+.post-body :where(img) {
+  border-radius: 0.5rem;
+  margin: 1.75rem 0;
+}
