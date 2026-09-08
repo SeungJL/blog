@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-이 저장소는 `blog.about20s.club` — ABOUT 서비스를 만들고 운영하는 이승주(Founder & Product Engineer)의 개발 블로그다. Astro 7 기반 정적 사이트.
+이 저장소는 `blog.study-about.club` — ABOUT 서비스를 만들고 운영하는 이승주(Founder & Product Engineer)의 개발 블로그다. Astro 7 기반 정적 사이트.
 
 Astro 관련 기본 안내는 `AGENTS.md`를 참고한다(이 파일과 별개, 심볼릭 링크 아님).
 
@@ -82,7 +82,7 @@ draft: boolean        # 선택, 기본 false — true면 `npm run build`(PROD) �
 
 ## 아키텍처 메모
 
-- `astro.config.mjs`의 `site` 값(`https://blog.about20s.club`)이 sitemap·RSS·canonical의 기준이다. 도메인을 바꾸면 여기부터 바꾼다.
+- `astro.config.mjs`의 `site` 값(`https://blog.study-about.club`)이 sitemap·RSS·canonical의 기준이다. 도메인을 바꾸면 여기부터 바꾼다.
 - `src/content.config.ts`는 Astro 7 API를 쓴다 (`src/content/config.ts` 아님, `glob` loader, `render()` — 구버전의 `entry.render()`가 아니다).
 - 스타일은 Tailwind 없이 `src/styles/global.css` 하나로 관리한다. 이 규모에서 유틸리티 프레임워크는 비용 대비 이득이 없다.
 - 서비스(`study-about.club`)와 별도 배포 파이프라인이다. 글 하나 고치자고 About의 CodeBuild를 태우지 않기 위한 의도적 분리다.
