@@ -15,11 +15,22 @@ const createPath = (...params: string[]) => {
 
 const BASE_PATHNAME = SITE.base || '/';
 
-export const cleanSlug = (text = '') =>
-  trimSlash(text)
-    .split('/')
-    .map((slug) => slugify(slug))
-    .join('/');
+// limax(slugify)는 한글을 음차하지 않고 통째로 버린다.
+// "화면을-보지-않고-테마를-골랐다가-28분-만에" -> "28"
+// 파일명을 한글 제목으로 두므로, CJK가 들어 있으면 직접 정리한다.
+const CJK_PATTERN = /[가-힯ᄀ-ᇿ㄰-㆏一-鿿぀-ヿ]/;
+
+const cleanSegment = (segment: string): string => {
+  if (!CJK_PATTERN.test(segment)) return slugify(segment);
+
+  return segment
+    .normalize('NFC')
+    .toLowerCase()
+    .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+export const cleanSlug = (text = '') => trimSlash(text).split('/').map(cleanSegment).join('/');
 
 export const BLOG_BASE = cleanSlug(APP_BLOG?.list?.pathname);
 export const CATEGORY_BASE = cleanSlug(APP_BLOG?.category?.pathname);
