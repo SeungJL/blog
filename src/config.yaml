@@ -1,0 +1,72 @@
+site:
+  name: About20s 개발 블로그
+  site: 'https://blog.study-about.club'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: null
+
+# Default SEO metadata
+metadata:
+  title:
+    default: About20s 개발 블로그
+    template: '%s — About20s 개발 블로그'
+  description: 'ABOUT 서비스를 만들고 운영하며 겪은 문제와 판단을 기록합니다.'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: About20s 개발 블로그
+    images:
+      - url: '~/assets/images/default.png'
+        width: 1200
+        height: 628
+    type: website
+  twitter:
+    cardType: summary_large_image
+
+i18n:
+  language: ko
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: true
+    postsPerPage: 10
+
+    post:
+      isEnabled: true
+      # 글 URL을 /posts/슬러그 로 둔다. 기존 발행 URL과 맞추기 위함.
+      permalink: '/posts/%slug%'
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      # 홈(/)이 목록 역할을 하므로 /blog 는 남겨두되 색인에서 뺀다.
+      pathname: 'blog'
+      robots:
+        index: false
+
+    category:
+      isEnabled: true
+      pathname: 'category'
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'tag'
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 3
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null
+
+ui:
+  theme: 'system'

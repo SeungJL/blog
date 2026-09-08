@@ -24,14 +24,18 @@ npx astro check   # 타입 체크
 frontmatter 스키마 (`src/content.config.ts`):
 ```yaml
 title: string          # 필수
-description: string    # 필수 — 없으면 빌드 실패. 검색 결과·OG 카드에 노출됨
-pubDatetime: datetime  # 필수 — pubDate 아님에 주의
-modDatetime: datetime  # 선택 (수정일)
-tags: string[]         # 선택, 기본 ["others"]
+excerpt: string        # 목록·검색·OG에 노출됨. 사실상 필수로 취급한다
+publishDate: datetime  # 필수 (pubDate/pubDatetime 아님)
+updateDate: datetime   # 선택
+category: string       # 선택
+tags: string[]         # 선택
 draft: boolean         # 선택 — true면 빌드 결과에서 제외
-featured: boolean      # 선택 — 홈 상단 "추천 글"에 노출
-ogImage: string        # 선택 — 없으면 제목으로 자동 생성됨
+image: string          # 선택 — 커버 이미지 URL
+---
 ```
+
+**글 파일은 `src/data/post/`에 둔다** (`src/content/posts/` 아님).
+URL은 `/posts/<파일명>` 으로 생성된다 (`src/config.yaml`의 `permalink` 설정).
 
 ### 작성 워크플로
 
@@ -143,10 +147,11 @@ ogImage: string        # 선택 — 없으면 제목으로 자동 생성됨
 
 ## 아키텍처 메모
 
-- **테마는 [AstroPaper](https://github.com/satnaing/astro-paper) 6.1.0을 쓴다.** 직접 만든 레이아웃이 아니므로 테마 파일을 함부로 고치지 않는다. 설정으로 해결되는지 먼저 확인한다.
-- **설정은 `astro-paper.config.ts` 한 곳에서 한다.** `src/config.ts`는 기본값을 적용하는 파생 파일이라 건드리지 않는다.
-- 사이트 URL·제목·작성자·소셜 링크가 모두 `astro-paper.config.ts`에 있다. 도메인을 바꾸면 여기부터 바꾼다.
-- **로케일은 `ko`다.** UI 문구는 `src/i18n/lang/ko.ts`에 있다. `astro.config.ts`의 `i18n.locales`에 등록되지 않은 로케일을 `astro-paper.config.ts`에 쓰면 빌드가 깨진다.
-- 스타일은 **Tailwind CSS 4**를 쓴다(테마 기본). 색상 스킴은 `src/styles/`에서 조정한다.
-- RSS·sitemap·OG 이미지 자동 생성·검색(Pagefind)·태그·아카이브·다크모드가 테마에 이미 들어 있다. 직접 만들지 않는다.
+- **테마는 [AstroWind](https://github.com/onwidget/astrowind)를 쓴다.** Astro 7.3.1 + Tailwind 4로 우리 환경과 버전이 일치한다. 테마 파일을 함부로 고치지 않고 설정으로 해결되는지 먼저 확인한다.
+- **설정은 `src/config.yaml` 한 곳에서 한다.** 사이트명·도메인·SEO 기본값·블로그 경로·테마 모드가 모두 여기 있다.
+- **메뉴는 `src/navigation.ts`.** 헤더/푸터 링크를 여기서 관리한다.
+- 원본 AstroWind는 마케팅 사이트 템플릿이라 랜딩·가격표·서비스 페이지가 딸려 있었다. **블로그만 남기려고 `src/pages/landing`, `src/pages/homes`, `pricing`, `services`, `contact`, `terms`, `privacy`, `public/decapcms`를 제거했다.** 테마를 업데이트할 때 다시 딸려 들어오지 않게 주의한다.
+- **홈(`src/pages/index.astro`)이 곧 글 목록이다.** `fetchPosts()`를 직접 부른다. `getStaticPathsBlogList`는 `/blog` 경로 전용이라 홈에서 쓰면 `page`가 undefined가 되어 빌드가 깨진다.
+- `/blog` 라우트는 살아 있지만 `robots.index: false`로 색인에서 뺐다. 홈과 중복이기 때문이다.
+- 글이 쌓여 페이지네이션이 필요해지면 홈에 `paginate`를 붙이거나 `/blog`로 넘긴다.
 - 서비스(`study-about.club`)와 별도 배포 파이프라인이다. 글 하나 고치자고 About의 CodeBuild를 태우지 않기 위한 의도적 분리다.
