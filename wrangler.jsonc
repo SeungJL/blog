@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare 대시보드에 이미 만들어진 Worker 이름과 일치시켜야
+  // 새 Worker가 생기지 않고 기존 것을 덮어쓴다.
+  "name": "spring-fire-e72f",
+  "compatibility_date": "2026-09-07",
+  "assets": {
+    // Astro의 정적 빌드 산출물. main 필드가 없는 이유는
+    // SSR 없이 정적 자산만 서빙하기 때문이다.
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
