@@ -21,11 +21,19 @@ jobs:
 
       - run: npm run build
 
+      # pages deploy는 프로젝트가 미리 존재해야 한다.
+      # 이미 있으면 에러가 나므로 실패를 무시해 멱등하게 만든다.
+      - name: Ensure Pages project exists
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create blog --production-branch=main
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Pages는 별도 설정 파일 없이 명령으로 배포한다.
-          # 프로젝트(blog)는 사전에 생성되어 있어야 한다.
           command: pages deploy dist --project-name=blog --branch=main
