@@ -1,24 +1,19 @@
 ---
-import Layout from '~/layouts/Layout.astro';
+import Layout from '~/layouts/PageLayout.astro';
 import { getHomePermalink } from '~/utils/permalinks';
 
-const title = `Error 404`;
+const metadata = {
+  title: '페이지를 찾을 수 없습니다',
+};
 ---
 
-<Layout metadata={{ title }}>
-  <section class="flex items-center h-full p-16">
-    <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
-      <div class="max-w-md text-center">
-        <h2 class="mb-8 font-bold text-9xl">
-          <span class="sr-only">Error</span>
-          <span class="text-primary">404</span>
-        </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
-        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But don't worry, you can find plenty of other things on our homepage.
-        </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
-      </div>
+<Layout metadata={metadata}>
+  <section class="flex items-center justify-center py-24 sm:py-32">
+    <div class="max-w-md px-5 text-center">
+      <p class="text-6xl font-bold text-primary mb-6">404</p>
+      <h1 class="text-2xl font-bold text-heading mb-3">페이지를 찾을 수 없습니다</h1>
+      <p class="text-muted mb-8">주소가 바뀌었거나 삭제된 글일 수 있습니다.</p>
+      <a href={getHomePermalink()} class="btn">글 목록으로</a>
     </div>
   </section>
 </Layout>
