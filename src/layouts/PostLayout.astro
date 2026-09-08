@@ -1,0 +1,33 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+}
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+
+const dateFormat = new Intl.DateTimeFormat("ko-KR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="post-content">
+    <header class="post-header">
+      <h1>{title}</h1>
+      <p class="meta">
+        {dateFormat.format(pubDate)}
+        {updatedDate && ` (업데이트: ${dateFormat.format(updatedDate)})`}
+        {tags.length > 0 && ` · ${tags.join(", ")}`}
+      </p>
+    </header>
+    <slot />
+  </article>
+</BaseLayout>
